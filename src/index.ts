@@ -2,6 +2,8 @@ import * as rm from 'typed-rest-client/RestClient'
 import * as hm from 'typed-rest-client/HttpClient'
 import * as cheerio from 'cheerio'
 import Status from './type'
+import { writeData } from '../model'
+import data from '../model/data';
 
 let restc: rm.RestClient = new rm.RestClient('rest-samples', 'http://codeforces.com')
 let httpc: hm.HttpClient = new hm.HttpClient('codeforce-http')
@@ -13,7 +15,9 @@ async function getContestList(): Promise<number[]> {
     return []
   }
   
-  return res.result.result.filter(data => data.phase === 'FINISHED').map(data => data.id)
+  return res.result.result
+    .filter(data => data.phase === 'FINISHED' && data.type === 'CF')
+    .map(data => data.id)
 }
 
 async function getContestStatus(contestId, from, count): Promise<Status[]> {
@@ -35,6 +39,9 @@ async function getSourceCode(contestId, submissionId): Promise<string> {
   let body: string = await res.readBody()
   
   const parsed = cheerio.load(body)
+  if (parsed('#program-source-text').length === 0) {
+    return 'fail'
+  }
   const sourceCode = parsed('#program-source-text')[0].children[0].data
   return sourceCode
 }
@@ -46,7 +53,9 @@ async function getCodesFromContest() {
   for await (const contestId of contestlist) {
     let from = 1;
     const count = 100;
-    while (true) {
+
+    let existSourceCode = true
+    while (existSourceCode) {
       const contestStatus = await getContestStatus(contestId, from, count)
       console.log(`read contest ${contestId} from ${from} to ${from + contestStatus.length - 1}`)
       from += count
@@ -55,13 +64,29 @@ async function getCodesFromContest() {
       }
 
       for await (const status of contestStatus) {
+        if (status.author.members.length !== 1) {
+          continue;
+        }
+
         const sourceCode = await getSourceCode(status.contestId, status.id)
+        if (sourceCode === 'fail') {
+          console.log(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
+          existSourceCode = false
+          break
+        }
+
         console.log(`contestId: ${status.contestId}`)
         console.log(`submissionId: ${status.id}`)
-        console.log(`user handle: ${JSON.stringify(status.author.members, null, 2)}`)
-        console.log(`source code:\n${sourceCode}`)
+        console.log(`user handle: ${status.author.members[0].handle}\n`)
+        
+        await writeData([{
+          user: status.author.members[0].handle,
+          problem: `${status.contestId}-${status.problem.index}-${status.id}`,
+          submissionTime: status.creationTimeSeconds,
+          code: sourceCode,
+          verdict: status.verdict
+        }])
       }
-      return
     }
   }
 }

@@ -1,7 +1,7 @@
 // http://codeforces.com/apiHelp/objects
 interface Problem {
   contestId: number,
-  problemsetName: string,
+  problemsetName?: string,
   index: string,
   name: string,
   type: string,

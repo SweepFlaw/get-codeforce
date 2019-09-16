@@ -1,16 +1,21 @@
 {
   "name": "get-codeforce",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "model": "ts-node model/index.ts",
+    "model-test": "ts-node model/model.spec.ts"
   },
   "dependencies": {
     "@types/cheerio": "^0.22.13",
+    "@types/dotenv": "^6.1.1",
     "@types/htmlparser2": "^3.10.1",
     "@types/mongoose": "^5.5.17",
+    "aws-sdk": "^2.528.0",
     "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^8.1.0",
     "htmlparser2": "^4.0.0",
     "mongoose": "^5.7.1",
     "node-html-parser": "^1.1.16",

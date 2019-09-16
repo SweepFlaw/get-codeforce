@@ -1,1 +1,10 @@
 node_modules
+
+# environment variable
+.env
+
+# log file
+**/*.log
+
+# local file
+pid.txt
