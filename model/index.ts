@@ -70,7 +70,12 @@ async function writeData(datas: CodeforceDB[]) {
         problem: data.problem,
         submissionTime: data.submissionTime,
         code: data.code,
-        verdict: data.verdict
+        verdict: data.verdict,
+        programmingLanguage: data.programmingLanguage,
+        passedTestCount: data.passedTestCount,
+        timeConsumedMillis: data.timeConsumedMillis,
+        memoryConsumedBytes: data.memoryConsumedBytes,
+        relativeTimeSeconds: data.relativeTimeSeconds
       }
     }
 
@@ -108,6 +113,11 @@ interface CodeforceDB {
   submissionTime: number,
   code: string,
   verdict: string
+  programmingLanguage: string,
+  passedTestCount: number,
+  timeConsumedMillis: number,
+  memoryConsumedBytes: number,
+  relativeTimeSeconds: number
 }
 
 export {

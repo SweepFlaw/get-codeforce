@@ -26,7 +26,7 @@ interface Party {
 
 export default interface Status {
   id: number,
-  contestId: number,
+  contestId?: number,
   creationTimeSeconds: number,
   relativeTimeSeconds: number,
   problem: Problem,

@@ -84,7 +84,12 @@ async function getCodesFromContest() {
           problem: `${status.contestId}-${status.problem.index}-${status.id}`,
           submissionTime: status.creationTimeSeconds,
           code: sourceCode,
-          verdict: status.verdict
+          verdict: status.verdict,
+          programmingLanguage: status.programmingLanguage,
+          passedTestCount: status.passedTestCount,
+          timeConsumedMillis: status.timeConsumedMillis,
+          memoryConsumedBytes: status.memoryConsumedBytes,
+          relativeTimeSeconds: status.relativeTimeSeconds
         }])
       }
     }
