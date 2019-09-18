@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 import Status from './type'
 import { writeData } from '@getCodeforce/model'
 import logger from '@getCodeforce/logger'
+import { SSL_OP_EPHEMERAL_RSA } from 'constants';
 
 let restc: rm.RestClient = new rm.RestClient('rest-samples', 'http://codeforces.com')
 let httpc: hm.HttpClient = new hm.HttpClient('codeforce-http')
@@ -33,7 +34,7 @@ async function getContestStatus(contestId, from, count): Promise<Status[]> {
 async function getSourceCode(contestId, submissionId): Promise<string> {
   let res: hm.HttpClientResponse = await httpc.get(`http://codeforces.com/contest/${contestId}/submission/${submissionId}`)
   if (res.message.statusCode.toString()[0] !== '2') {
-    return 'fail'
+    return 'wrong status code'
   }
   
   let body: string = await res.readBody()
@@ -44,6 +45,12 @@ async function getSourceCode(contestId, submissionId): Promise<string> {
   }
   const sourceCode = parsed('#program-source-text')[0].children[0].data
   return sourceCode
+}
+
+const sleep = (ms) => {
+  return new Promise(resolve=>{
+      setTimeout(resolve,ms)
+  })
 }
 
 async function getCodesFromContest() {
@@ -70,9 +77,14 @@ async function getCodesFromContest() {
 
         const sourceCode = await getSourceCode(status.contestId, status.id)
         if (sourceCode === 'fail') {
-          logger.info(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
+          logger.error(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
           existSourceCode = false
           break
+        } else if (sourceCode === 'wrong status code') {
+          logger.error(`wrong status code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
+          
+          await sleep(1000)
+          continue;
         }
 
         logger.info(`contestId: ${status.contestId}`)
@@ -90,6 +102,7 @@ async function getCodesFromContest() {
           memoryConsumedBytes: status.memoryConsumedBytes,
           relativeTimeSeconds: status.relativeTimeSeconds
         }])
+        await sleep(50)
       }
     }
   }
