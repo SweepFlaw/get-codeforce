@@ -2,8 +2,8 @@ import * as rm from 'typed-rest-client/RestClient'
 import * as hm from 'typed-rest-client/HttpClient'
 import * as cheerio from 'cheerio'
 import Status from './type'
-import { writeData } from '../model'
-import data from '../model/data';
+import { writeData } from '@getCodeforce/model'
+import logger from '@getCodeforce/logger'
 
 let restc: rm.RestClient = new rm.RestClient('rest-samples', 'http://codeforces.com')
 let httpc: hm.HttpClient = new hm.HttpClient('codeforce-http')
@@ -48,7 +48,7 @@ async function getSourceCode(contestId, submissionId): Promise<string> {
 
 async function getCodesFromContest() {
   const contestlist = await getContestList()
-  console.log(`contest list count: ${contestlist.length}`)
+  logger.info(`contest list count: ${contestlist.length}`)
 
   for await (const contestId of contestlist) {
     let from = 1;
@@ -57,7 +57,7 @@ async function getCodesFromContest() {
     let existSourceCode = true
     while (existSourceCode) {
       const contestStatus = await getContestStatus(contestId, from, count)
-      console.log(`read contest ${contestId} from ${from} to ${from + contestStatus.length - 1}`)
+      logger.info(`read contest ${contestId} from ${from} to ${from + contestStatus.length - 1}`)
       from += count
       if (contestStatus.length <= 0) {
         break;
@@ -70,14 +70,13 @@ async function getCodesFromContest() {
 
         const sourceCode = await getSourceCode(status.contestId, status.id)
         if (sourceCode === 'fail') {
-          console.log(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
+          logger.info(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
           existSourceCode = false
           break
         }
 
-        console.log(`contestId: ${status.contestId}`)
-        console.log(`submissionId: ${status.id}`)
-        console.log(`user handle: ${status.author.members[0].handle}\n`)
+        logger.info(`contestId: ${status.contestId}`)
+        logger.info(`submissionId: ${status.id}`)
         
         await writeData([{
           user: status.author.members[0].handle,
@@ -98,6 +97,6 @@ async function getCodesFromContest() {
 
 try {
   getCodesFromContest()
-} catch (e) {
-  console.log(e)
+} catch (err) {
+  logger.error(JSON.stringify(err, null, 2))
 }

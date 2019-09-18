@@ -1,5 +1,6 @@
 import * as AWS from 'aws-sdk'
 import * as dotenv from 'dotenv'
+import logger from '@getCodeforce/logger'
 import datas from './data'
 dotenv.config()
 
@@ -55,9 +56,9 @@ async function createTable() {
 
   try {
     await dynamodb.createTable(params).promise()
-    console.log('table created')
+    logger.info('table created')
   } catch (err) {
-    console.error(JSON.stringify(err, null, 2))
+    logger.error(JSON.stringify(err, null, 2))
   }
 }
 
@@ -81,9 +82,9 @@ async function writeData(datas: CodeforceDB[]) {
 
     try {
       const added = await docClient.put(params).promise()
-      console.log('added data')
+      logger.info('added data')
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2))
+      logger.error(JSON.stringify(err, null, 2))
     }
   }
 }
@@ -100,9 +101,9 @@ async function findData(datas: CodeforceDB[]) {
 
     try {
       const find = await docClient.get(params).promise()
-      console.log('find data')
+      logger.info('find data')
     } catch (err) {
-      console.error(JSON.stringify(err, null, 2))
+      logger.error(JSON.stringify(err, null, 2))
     }
   }
 }

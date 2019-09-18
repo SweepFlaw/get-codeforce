@@ -17,3 +17,8 @@ docker build --tag rhfktj/get-codeforce:0.1 .
 ```bash
 docker run -it --rm rhfktj/get-codeforce:0.1 /bin/bash
 ```
+
+```
+docker run -it --name get-codeforce -d rhfktj/get-codeforce:0.1
+docker exec -it get-codeforce /bin/bash
+```

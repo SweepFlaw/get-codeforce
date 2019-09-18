@@ -5,4 +5,5 @@ SHELL ["/bin/bash", "-c"]
 COPY . ./get-codeforce
 WORKDIR /get-codeforce
 RUN npm install -g yarn \
-    && yarn install
+    && yarn install \
+    && mkdir logs

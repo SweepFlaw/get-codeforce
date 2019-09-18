@@ -5,6 +5,7 @@ node_modules
 
 # log file
 **/*.log
+logs/**/*
 
 # local file
 pid.txt
