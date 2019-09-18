@@ -7,4 +7,4 @@ WORKDIR /get-codeforce
 RUN npm install -g yarn \
     && yarn install \
     && mkdir -p logs \
-    && rm .env
+    && rm -f .env
