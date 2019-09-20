@@ -10,6 +10,19 @@ AWS.config.update({
   secretAccessKey: process.env.SecretAccessKey
 })
 
+interface CodeforceDB { 
+  user: string
+  problem: string // contestId + '-' + problem index + '-' + submissionId
+  submissionTime: number
+  code: string
+  verdict: string
+  programmingLanguage: string
+  passedTestCount: number
+  timeConsumedMillis: number
+  memoryConsumedBytes: number
+  relativeTimeSeconds: number
+}
+
 const dynamodb = new AWS.DynamoDB({
   region: 'ap-northeast-2',
   accessKeyId: process.env.AccessKeyId,
@@ -106,19 +119,6 @@ async function findData(datas: CodeforceDB[]) {
       logger.error(JSON.stringify(err, null, 2))
     }
   }
-}
-
-interface CodeforceDB { 
-  user: string,
-  problem: string, // contestId + '-' + problem index + '-' + submissionId
-  submissionTime: number,
-  code: string,
-  verdict: string
-  programmingLanguage: string,
-  passedTestCount: number,
-  timeConsumedMillis: number,
-  memoryConsumedBytes: number,
-  relativeTimeSeconds: number
 }
 
 export {

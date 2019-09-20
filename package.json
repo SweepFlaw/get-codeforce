@@ -1,10 +1,13 @@
 {
   "name": "get-codeforce",
   "version": "1.0.0",
+  "engines": { "node": ">=12.10.0"},
+  "engineStrict": true,
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register --files src/index.ts",
+    "crawl": "ts-node -r tsconfig-paths/register --files src/crawl/index.ts",
+    "scan": "ts-node -r tsconfig-paths/register --files src/scan/index.ts",
     "model": "ts-node -r tsconfig-paths/register --files model/index.ts",
     "model-test": "ts-node -r tsconfig-paths/register --files model/model.spec.ts"
   },

@@ -5,7 +5,10 @@ node_modules
 
 # log file
 **/*.log
-logs/**/*
+logs
 
 # local file
 pid.txt
+
+# data files
+datas

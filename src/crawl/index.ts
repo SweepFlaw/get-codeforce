@@ -78,12 +78,15 @@ async function getCodesFromContest() {
         const sourceCode = await getSourceCode(status.contestId, status.id)
         if (sourceCode === 'fail') {
           logger.error(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
-          existSourceCode = false
-          break
+          
+          // wait 2 minute, maybe server block crawler
+          await sleep(120000)
+          continue;
         } else if (sourceCode === 'wrong status code') {
           logger.error(`wrong status code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
           
-          await sleep(1000)
+          // wait 2 minute, maybe server block crawler
+          await sleep(120000)
           continue;
         }
 
@@ -102,7 +105,9 @@ async function getCodesFromContest() {
           memoryConsumedBytes: status.memoryConsumedBytes,
           relativeTimeSeconds: status.relativeTimeSeconds
         }])
-        await sleep(50)
+
+        // wait at least 100ms
+        await sleep(100)
       }
     }
   }
