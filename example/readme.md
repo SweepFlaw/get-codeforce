@@ -136,6 +136,7 @@ n - x
 "value":"\tfor(int i=1;i<=N;i++)\n"}],"level":"info"}
 {"message":[{"count":1,"removed":true,"value":"2"},{"count":1,"added":true,"value":"1"}],"level":"info"}
 {"message":"Time diff: 1045","level":"info"}
+{"message":"other submission between them: 0","level":"info"}
 ```
 
 ## i, j 혼동
@@ -147,6 +148,7 @@ n - x
 "value":"            if (a[i] % a[j] == 0) check = 0;\n"}],"level":"info"}
 {"message":[{"count":1,"removed":true,"value":"i"},{"count":1,"added":true,"value":"j"}],"level":"info"}
 {"message":"Time diff: 1093","level":"info"}
+{"message":"other submission between them: 0","level":"info"}
 
 {"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/Supermagzzz/C/60542942OK/code.cpp","level":"info"}
 {"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/Supermagzzz/C/60541895WA/code.cpp","level":"info"}
@@ -164,7 +166,7 @@ n - x
 {"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/Rose_max/F/60604338WA/code.cpp","level":"info"}
 {"message":[{"line":56,"count":1,"removed":true,
 "value":"\t\tint p=hd;for(;p<tl&&ans[list[p]+1]==ans[list[p]];++p);\n"},{"line":56,"count":1,"added":true,
-"value":"\t\tint p=hd;for(;p<tl&&ans[list[p+1]]==ans[list[p]];++p);\n"}],"level":"info"}
+  "value":"\t\tint p=hd;for(;p<tl&&ans[list[p+1]]==ans[list[p]];++p);\n"}],"level":"info"}
 {"message":[{"count":1,"removed":true,"value":"]"},{"count":1,"added":true,"value":"]"}],"level":"info"}
 {"message":"Time diff: 14","level":"info"}
 {"message":"other submission between them: 0","level":"info"}
