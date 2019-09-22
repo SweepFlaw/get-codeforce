@@ -162,7 +162,9 @@ n - x
 ```json
 {"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/Rose_max/F/60604351OK/code.cpp","level":"info"}
 {"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/Rose_max/F/60604338WA/code.cpp","level":"info"}
-{"message":[{"line":56,"count":1,"removed":true,"value":"\t\tint p=hd;for(;p<tl&&ans[list[p]+1]==ans[list[p]];++p);\n"},{"line":56,"count":1,"added":true,"value":"\t\tint p=hd;for(;p<tl&&ans[list[p+1]]==ans[list[p]];++p);\n"}],"level":"info"}
+{"message":[{"line":56,"count":1,"removed":true,
+"value":"\t\tint p=hd;for(;p<tl&&ans[list[p]+1]==ans[list[p]];++p);\n"},{"line":56,"count":1,"added":true,
+"value":"\t\tint p=hd;for(;p<tl&&ans[list[p+1]]==ans[list[p]];++p);\n"}],"level":"info"}
 {"message":[{"count":1,"removed":true,"value":"]"},{"count":1,"added":true,"value":"]"}],"level":"info"}
 {"message":"Time diff: 14","level":"info"}
 {"message":"other submission between them: 0","level":"info"}
