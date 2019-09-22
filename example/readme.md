@@ -1,27 +1,31 @@
 # OK 제출 이전의 wrong code와의 비교
 ## 정답에 가까운 코드 조건
-- 같은 위치의 줄 1개가 다른 경우: 29493개의 code들 중 1085개의 쌍(중복 가능)
-- solved case count: 14745
-- cannot solve case count: 1674
-- one time solved case count: 9599
-- 틀리고 풀었던 개수: 5146
-- a line diff problem case count : 1019
-- a word diff problem case count : 333
-- a line diff case count, can be multiple case in one problem : 1085
-- a word diff case count, can be multiple case in one problem : 356
-
+- 같은 위치의 줄 1개가 다른 경우: 79827개의 code들 중 2579개의 쌍(중복 가능)
+- total code count: 79827
+- solved case count: 36585
+- cannot solve case count: 5632
+- one time solved case count: 23350
+- 틀리고 풀었던 개수: 13235
+- a line diff problem case count : 2427
+- a word diff problem case count : 891
+- a line diff case count, can be multiple case in one problem : 2579
+- a word diff case count, can be multiple case in one problem : 965
 
 ## 차이의 정도를 보기
 - jsdiff라이브러리의 diffWords 함수를 사용 단어가 몇개나 차이가 나는가
 - word 파서를 별도로 사용하는 듯(나름 정확)
 
 ## 한 개의 단어가 치환 or 생성 or 삭제된 경우의 가짓수
-- 356개의 쌍
+- 965개의 쌍
 ```json
-{"message":"equality diff case count: 75","level":"info"}
-{"message":"constant diff case count: 76","level":"info"}
-{"message":"variable diff case count: 150","level":"info"}
-{"message":"variable and constant diff case count: 12","level":"info"}
+// 부등식/ 등식 잘못 씀
+{"message":"equality diff case count: 172","level":"info"}
+// 상수 잘못 씀
+{"message":"constant diff case count: 233","level":"info"}
+// 변수 잘못 씀
+{"message":"variable diff case count: 406","level":"info"}
+// 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
+{"message":"variable and constant diff case count: 39","level":"info"}
 ```
 
 # 사람의 코딩 실수 예제들

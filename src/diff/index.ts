@@ -36,17 +36,17 @@ async function diffDatas() {
   let vcDiffCaseCount = 0
   // operator 잘못 씀
 
-  for await (const contestId of contestIds) {
+  for (const contestId of contestIds) {
     const users = fs.readdirSync(`${dataPath}/${contestId}`)
 
-    for await (const user of users) {
+    for (const user of users) {
       const problemIndexes = fs.readdirSync(`${dataPath}/${contestId}/${user}`)
 
-      for await (const problemIndex of problemIndexes) {
+      for (const problemIndex of problemIndexes) {
         const submissionIds = fs.readdirSync(`${dataPath}/${contestId}/${user}/${problemIndex}`)
         totalCodeCount += submissionIds.length
         // console.log(`${contestId} ${user} ${problemIndex} has ${submissionIds.length} submisson`)
-  
+
         const okIndexes = submissionIds.map((submissionId, idx) => {
           if (submissionId.substr(submissionId.length - 2, 2) === 'OK') {
             return idx
@@ -57,7 +57,7 @@ async function diffDatas() {
         if (okIndexes.length === 0) {
           // logger.info(`${contestId} ${user} ${problemIndex} did not solve problem`)
           cannotSolveCaseCount += 1
-          break
+          continue
         }
         // 문제를 푼 케이스의 개수
         solvedCaseCount += 1
@@ -65,7 +65,7 @@ async function diffDatas() {
         if (submissionIds.length < 2) {
           // logger.info(`${contestId} ${user} ${problemIndex} has 1 submisson`)
           oneTimeSolvedCaseCount += 1
-          break
+          continue
         }
   
         let oki: number = 0
@@ -119,7 +119,7 @@ async function diffDatas() {
               .diffWords(diffResult[0].value, diffResult[1].value)
               .filter(res => res.added === true || res.removed === true)
 
-            console.log(`${contestId} ${user} ${problemIndex} diff result with ${submissionIds[okIndexes[oki]]} and ${submissionIds[subi]}`)
+            // console.log(`${contestId} ${user} ${problemIndex} diff result with ${submissionIds[okIndexes[oki]]} and ${submissionIds[subi]}`)
             logger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[subi]}/code.cpp`)
             logger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`)
             logger.info(diffResult)
