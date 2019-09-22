@@ -69,6 +69,7 @@ async function scanAndSave() {
 }
 
 try {
+  logger.info(`scan starts`)
   scanAndSave()
 } catch (err) {
   logger.error(JSON.stringify(err, null, 2))

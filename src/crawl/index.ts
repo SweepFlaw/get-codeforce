@@ -4,7 +4,6 @@ import * as cheerio from 'cheerio'
 import Status from './type'
 import { writeData } from '@getCodeforce/model'
 import logger from '@getCodeforce/logger'
-import { SSL_OP_EPHEMERAL_RSA } from 'constants';
 
 let restc: rm.RestClient = new rm.RestClient('rest-samples', 'http://codeforces.com')
 let httpc: hm.HttpClient = new hm.HttpClient('codeforce-http')

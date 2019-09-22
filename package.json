@@ -1,22 +1,27 @@
 {
   "name": "get-codeforce",
   "version": "1.0.0",
-  "engines": { "node": ">=12.10.0"},
+  "engines": {
+    "node": ">=12.10.0"
+  },
   "engineStrict": true,
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "crawl": "ts-node -r tsconfig-paths/register --files src/crawl/index.ts",
     "scan": "ts-node -r tsconfig-paths/register --files src/scan/index.ts",
+    "diff": "ts-node -r tsconfig-paths/register --files src/diff/index.ts",
     "model": "ts-node -r tsconfig-paths/register --files model/index.ts",
     "model-test": "ts-node -r tsconfig-paths/register --files model/model.spec.ts"
   },
   "dependencies": {
     "@types/cheerio": "^0.22.13",
+    "@types/diff": "^4.0.2",
     "@types/dotenv": "^6.1.1",
     "@types/htmlparser2": "^3.10.1",
     "aws-sdk": "^2.528.0",
     "cheerio": "^1.0.0-rc.3",
+    "diff": "^4.0.1",
     "dotenv": "^8.1.0",
     "htmlparser2": "^4.0.0",
     "nodemon": "^1.19.2",

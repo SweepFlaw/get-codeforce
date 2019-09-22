@@ -18,6 +18,7 @@
   "exclude" : ["node_modules"],
   "include" : [
     "src/**/*",
-    "model/**/*"
+    "model/**/*",
+    "logger/**/*"
   ]
 }
