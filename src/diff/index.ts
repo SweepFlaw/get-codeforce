@@ -12,9 +12,19 @@ async function diffDatas() {
   const aWordDiffLogger = makeLogger(`aWordDiff.log`)
   // 총 코드 개수
   let totalCodeCount = 0
-  // 한 line이 다른 경우의 가짓 수
+  // 문제를 푼 케이스의 개수
+  let solvedCaseCount = 0
+  // 문제를 못 푼 케이스
+  let cannotSolveCaseCount = 0
+  // 한번에 푼 케이스
+  let oneTimeSolvedCaseCount = 0
+  // 한 줄만 달라서 틀린 문제 수
+  let wrongLineProblemCaseCount = 0
+  // 한 단어만 달라서 틀린 문제 수
+  let wrongWordProblemCaseCount = 0
+  // 한 line이 다른 경우의 쌍의 가짓 수, 한 문제에서 여러 번 가능
   let lineDiffCaseCount = 0
-  // 한 개의 단어가 치환 or 생성 or 삭제된 경우의 가짓수
+  // 한 개의 단어가 치환 or 생성 or 삭제된 경우의 가짓수, 한 문제에서 여러 번 가능
   let aWordDiffCaseCount = 0
   // 부등식/ 등식 잘못 씀
   let equalityDiffCaseCount = 0
@@ -36,11 +46,6 @@ async function diffDatas() {
         const submissionIds = fs.readdirSync(`${dataPath}/${contestId}/${user}/${problemIndex}`)
         totalCodeCount += submissionIds.length
         // console.log(`${contestId} ${user} ${problemIndex} has ${submissionIds.length} submisson`)
-        
-        if (submissionIds.length < 2) {
-          // logger.info(`${contestId} ${user} ${problemIndex} has 1 submisson`)
-          break
-        }
   
         const okIndexes = submissionIds.map((submissionId, idx) => {
           if (submissionId.substr(submissionId.length - 2, 2) === 'OK') {
@@ -51,11 +56,22 @@ async function diffDatas() {
   
         if (okIndexes.length === 0) {
           // logger.info(`${contestId} ${user} ${problemIndex} did not solve problem`)
+          cannotSolveCaseCount += 1
+          break
+        }
+        // 문제를 푼 케이스의 개수
+        solvedCaseCount += 1
+        
+        if (submissionIds.length < 2) {
+          // logger.info(`${contestId} ${user} ${problemIndex} has 1 submisson`)
+          oneTimeSolvedCaseCount += 1
           break
         }
   
-        let oki = 0
-        let codeOK = fs.readFileSync(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`, { encoding: 'utf8'})
+        let oki: number = 0
+        let codeOK: string = fs.readFileSync(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`, { encoding: 'utf8'})
+        let isLineDiff: boolean = false
+        let isWordDiff: boolean = false
         for (let subi = 0; subi < submissionIds.length; subi += 1) {
           if (subi === okIndexes[oki]) {
             oki += 1
@@ -110,7 +126,8 @@ async function diffDatas() {
             logger.info(diffWord)
             logger.info(`Time diff: ${metaOK.submissionTime - metaWrong.submissionTime}`)
             logger.info(`other submission between them: ${okIndexes[oki] - subi - 1}`)
-            
+
+            isLineDiff = true // 이 문제는 한 줄만 달라서 틀린 적이 있다
             lineDiffCaseCount += 1
             if (diffWord.length === 1 && diffWord[0].count === 1) {
               aWordDiffCaseCount += 1
@@ -118,6 +135,7 @@ async function diffDatas() {
             if (diffWord.length === 2) {
               if (diffWord[0].added && diffWord[1].removed || diffWord[0].removed && diffWord[1].added) {
                 if (diffWord[0].count === 1 && diffWord[1].count === 1) {
+                  isWordDiff = true // 이 문제는 한 단어만 달라서 틀린 적이 있다.
                   aWordDiffCaseCount += 1
                   aWordDiffLogger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[subi]}/code.cpp`)
                   aWordDiffLogger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`)
@@ -139,11 +157,19 @@ async function diffDatas() {
                     || !isNaN(Number((diffWord[0].value))) && diffWord[1].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g)) {
                     // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
                     vcDiffCaseCount += 1
+                    // console.log(diffWord)
                   }  
                 }
               }
             }
           }
+        }
+
+        if (isLineDiff) {
+          wrongLineProblemCaseCount += 1
+        }
+        if (isWordDiff) {
+          wrongWordProblemCaseCount += 1
         }
       }
     }
@@ -151,10 +177,20 @@ async function diffDatas() {
 
   logger.info(`total code count: ${totalCodeCount}`)
   console.log(`total code count: ${totalCodeCount}`)
-  logger.info(`a line diff case count : ${lineDiffCaseCount}`)
-  console.log(`a line diff case count : ${lineDiffCaseCount}`)
-  logger.info(`a word diff case count : ${aWordDiffCaseCount}`)
-  console.log(`a word diff case count : ${aWordDiffCaseCount}`)
+  logger.info(`solved case count: ${solvedCaseCount}`)
+  console.log(`solved case count: ${solvedCaseCount}`)
+  logger.info(`cannot solve case count: ${cannotSolveCaseCount}`)
+  console.log(`cannot solve case count: ${cannotSolveCaseCount}`)
+  logger.info(`one time solved case count: ${oneTimeSolvedCaseCount}`)
+  console.log(`one time solved case count: ${oneTimeSolvedCaseCount}`)
+  logger.info(`a line diff problem case count : ${wrongLineProblemCaseCount}`)
+  console.log(`a line diff problem case count : ${wrongLineProblemCaseCount}`)
+  logger.info(`a word diff problem case count : ${wrongWordProblemCaseCount}`)
+  console.log(`a word diff problem case count : ${wrongWordProblemCaseCount}`)
+  logger.info(`a line diff case count, can be multiple case in one problem : ${lineDiffCaseCount}`)
+  console.log(`a line diff case count, can be multiple case in one problem : ${lineDiffCaseCount}`)
+  logger.info(`a word diff case count, can be multiple case in one problem : ${aWordDiffCaseCount}`)
+  console.log(`a word diff case count, can be multiple case in one problem : ${aWordDiffCaseCount}`)
 
 
   // 부등식/ 등식 잘못 씀

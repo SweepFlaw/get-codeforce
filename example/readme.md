@@ -1,6 +1,15 @@
 # OK 제출 이전의 wrong code와의 비교
 ## 정답에 가까운 코드 조건
 - 같은 위치의 줄 1개가 다른 경우: 29493개의 code들 중 1085개의 쌍(중복 가능)
+- solved case count: 14745
+- cannot solve case count: 1674
+- one time solved case count: 9599
+- 틀리고 풀었던 개수: 5146
+- a line diff problem case count : 1019
+- a word diff problem case count : 333
+- a line diff case count, can be multiple case in one problem : 1085
+- a word diff case count, can be multiple case in one problem : 356
+
 
 ## 차이의 정도를 보기
 - jsdiff라이브러리의 diffWords 함수를 사용 단어가 몇개나 차이가 나는가
