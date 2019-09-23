@@ -24,13 +24,13 @@
 // 부등식/ 등식 잘못 씀
 {"message":"equality diff case count: 172","level":"info"}
 {"message":"equality diff average seconds: 741.7848837209302","level":"info"}
-// 상수 잘못 씀
+// 숫자 잘못 씀
 {"message":"constant diff case count: 233","level":"info"}
 {"message":"constant diff average seconds: 428.31330472103","level":"info"}
-// 변수 잘못 씀(예약어 포함): ^[a-zA-Z_$][a-zA-Z_$0-9]*
+// 영문자 잘못 씀(예약어 포함): ^[a-zA-Z_$][a-zA-Z_$0-9]*
 {"message":"variable diff case count: 406","level":"info"}
 {"message":"variable diff average seconds: 506.1527093596059","level":"info"}
-// 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
+// 영문자 숫자 잘못 씀 (영문자 => 숫자 or 숫자 => 영문자)
 {"message":"variable and constant diff case count: 39","level":"info"}
 {"message":"variable and constant diff average seconds: 609.3076923076923","level":"info"}
 // operator 잘못 씀 except (in)equality
@@ -51,9 +51,23 @@
 - 한 줄만 다른 207개 62개
 ## int -> long long
 - 한 줄만 다른 158개 중 106개
+=> n - max(0ll, x)
+=> n - max(0ll, x1 - max(0ll, x2))
+=> max(0ll, n-x)
+
 
 # 사람의 코딩 실수 예제들
 ## 한 줄 전체를 주석처리
+```json
+{"message":"/newdisk/get-codeforce/src/diff/../../datas/1215/Chem_Than/B/60651791WA/code.cpp","level":"info"}
+{"message":"/newdisk/get-codeforce/src/diff/../../datas/1215/Chem_Than/B/60651812OK/code.cpp","level":"info"}
+{"message":[{"line":11,"count":1,"removed":true,
+"value":"    freopen(\"input.txt\",\"r\",stdin);\n"},{"line":11,"count":1,"added":true,
+"value":"    //freopen(\"input.txt\",\"r\",stdin);\n"}],"level":"info"}
+{"message":[{"count":1,"added":true,"value":"//"}],"level":"info"}
+{"message":"Time diff: 49","level":"info"}
+{"message":"other submission between them: 0","level":"info"}
+```
 
 ## 최댓값 제한
 - n - x => max(0ll, n-x)로 고침
