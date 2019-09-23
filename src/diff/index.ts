@@ -46,6 +46,13 @@ async function diffDatas() {
   let operDiffCaseCount = 0
   let operDiffTime = 0
 
+  // only add in a line
+  let onlyAddCaseCount = 0
+  let onlyAddTime = 0
+  // only remove in a line
+  let onlyRemoveCaseCount = 0
+  let onlyRemoveTime = 0
+
   for (const contestId of contestIds) {
     const users = fs.readdirSync(`${dataPath}/${contestId}`)
 
@@ -139,6 +146,7 @@ async function diffDatas() {
 
             isLineDiff = true // 이 문제는 한 줄만 달라서 틀린 적이 있다
             lineDiffCaseCount += 1
+
             if (diffWord.length === 1 && diffWord[0].count === 1) {
               aWordDiffCaseCount += 1
             }
@@ -181,6 +189,17 @@ async function diffDatas() {
                   }
                 }
               }
+            }
+
+            // only add or remove
+            let timeDiff = metaOK.submissionTime - metaWrong.submissionTime
+            if (diffWord.reduce((res, val) => res && val.added, true)) {
+              onlyAddCaseCount += 1
+              onlyAddTime += timeDiff <= 7200 ? timeDiff : 7200
+            }
+            if (diffWord.reduce((res, val) => res && val.removed, true)) {
+              onlyRemoveCaseCount += 1
+              onlyRemoveTime += timeDiff <= 7200 ? timeDiff : 7200
             }
           }
         }
@@ -230,6 +249,13 @@ async function diffDatas() {
   // operator 잘못 씀 except (in)equality
   logger.info(`operator diff case count: ${operDiffCaseCount}`)
   logger.info(`operator diff average seconds: ${operDiffTime / operDiffCaseCount}`)
+
+  // only add in a line
+  logger.info(`only add in a line case count: ${onlyAddCaseCount}`)
+  logger.info(`only add in a line average seconds: ${onlyAddTime / onlyAddCaseCount}`)
+  // only remove in a line
+  logger.info(`only remove in a line case count: ${onlyRemoveCaseCount}`)
+  logger.info(`only remove in a line average seconds: ${onlyRemoveTime / onlyRemoveCaseCount}`)
 }
 
 try {

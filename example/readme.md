@@ -38,6 +38,14 @@
 {"message":"operator diff average seconds: 388.7241379310345","level":"info"
 ```
 
+## 오직 add or remove만 있을 때
+```json
+{"message":"only add in a line case count: 833","level":"info"}
+{"message":"only add in a line average seconds: 556.5774309723889","level":"info"}
+{"message":"only remove in a line case count: 105","level":"info"}
+{"message":"only remove in a line average seconds: 770.2190476190476","level":"info"}
+```
+
 # 사람의 코딩 실수 예제들
 
 ## 최댓값 제한
