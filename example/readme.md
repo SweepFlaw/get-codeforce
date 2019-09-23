@@ -27,7 +27,7 @@
 // 상수 잘못 씀
 {"message":"constant diff case count: 233","level":"info"}
 {"message":"constant diff average seconds: 428.31330472103","level":"info"}
-// 변수 잘못 씀
+// 변수 잘못 씀(예약어 포함): ^[a-zA-Z_$][a-zA-Z_$0-9]*
 {"message":"variable diff case count: 406","level":"info"}
 {"message":"variable diff average seconds: 506.1527093596059","level":"info"}
 // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
@@ -46,7 +46,14 @@
 {"message":"only remove in a line average seconds: 770.2190476190476","level":"info"}
 ```
 
+# 특정 문제마다 반복되는 패턴
+## max(0, x)
+- 한 줄만 다른 207개 62개
+## int -> long long
+- 한 줄만 다른 158개 중 106개
+
 # 사람의 코딩 실수 예제들
+## 한 줄 전체를 주석처리
 
 ## 최댓값 제한
 - n - x => max(0ll, n-x)로 고침
@@ -200,5 +207,19 @@ n - x
   "value":"\t\tint p=hd;for(;p<tl&&ans[list[p+1]]==ans[list[p]];++p);\n"}],"level":"info"}
 {"message":[{"count":1,"removed":true,"value":"]"},{"count":1,"added":true,"value":"]"}],"level":"info"}
 {"message":"Time diff: 14","level":"info"}
+{"message":"other submission between them: 0","level":"info"}
+
+{"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/pk10/C/60554782WA/code.cpp","level":"info"}
+{"message":"/newdisk/get-codeforce/src/diff/../../datas/1209/pk10/C/60557405OK/code.cpp","level":"info"}
+{"message":[{"line":22,"count":1,"removed":true,"value":"                w[j]=w[j]+1;\n"},{"line":22,"count":1,"added":true,"value":"                w[j]=w[j+1];\n"}],"level":"info"}
+{"message":[{"count":1,"removed":true,"value":"]"},{"count":1,"added":true,"value":"]"}],"level":"info"}
+{"message":"Time diff: 656","level":"info"}
+{"message":"other submission between them: 0","level":"info"}
+
+{"message":"/newdisk/get-codeforce/src/diff/../../datas/1215/xiayuhandalao/C/60613819WA/code.cpp","level":"info"}
+{"message":"/newdisk/get-codeforce/src/diff/../../datas/1215/xiayuhandalao/C/60615165OK/code.cpp","level":"info"}
+{"message":[{"line":41,"count":1,"removed":true,"value":"            cout<<v1[i]<<\" \"<<v1[i]+1<<endl;\n"},{"line":41,"count":1,"added":true,"value":"            cout<<v1[i]<<\" \"<<v1[i+1]<<endl;\n"}],"level":"info"}
+{"message":[{"count":1,"removed":true,"value":"]"},{"count":1,"added":true,"value":"]"}],"level":"info"}
+{"message":"Time diff: 285","level":"info"}
 {"message":"other submission between them: 0","level":"info"}
 ```

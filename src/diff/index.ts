@@ -10,6 +10,10 @@ const operatorSymbols = ['-', '+', '*', '/', '%',
   '+=', '-=', '/=', '*=', '%=', '&=', '|=', '^=', '<<=', '>>='
 ]
 
+function getTimeLimit(time: number, limit: number = 7200) {
+  return time < limit ? time : limit
+}
+
 async function diffDatas() {
   // 한 단어가 다른 로그만 별도로 기록
   const aWordDiffLogger = makeLogger(`aWordDiff.log`)
@@ -156,7 +160,7 @@ async function diffDatas() {
                   let timeDiff = metaOK.submissionTime - metaWrong.submissionTime
                   isWordDiff = true // 이 문제는 한 단어만 달라서 틀린 적이 있다.
                   aWordDiffCaseCount += 1
-                  aWordDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                  aWordDiffTime += getTimeLimit(timeDiff)
 
                   aWordDiffLogger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[subi]}/code.cpp`)
                   aWordDiffLogger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`)
@@ -168,24 +172,24 @@ async function diffDatas() {
                   // 부등식/ 등식 잘못 씀
                   if (equalitySymbols.includes(diffWord[0].value) && equalitySymbols.includes(diffWord[1].value)) {
                     equalityDiffCaseCount += 1
-                    equalityDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                    equalityDiffTime += getTimeLimit(timeDiff)
                   } else if (!isNaN(Number((diffWord[0].value))) && !isNaN(Number((diffWord[1].value)))) {
                     // 상수 잘못 씀
                     constantDiffCaseCount += 1
-                    constantDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                    constantDiffTime += getTimeLimit(timeDiff)
                   } else if (diffWord[0].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g) && diffWord[1].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g)) {
                     // 변수 잘못 씀
                     variableDiffCaseCount += 1
-                    variableDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                    variableDiffTime += getTimeLimit(timeDiff)
                   } else if (diffWord[0].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g) && !isNaN(Number((diffWord[1].value)))
                     || !isNaN(Number((diffWord[0].value))) && diffWord[1].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g)) {
                     // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
                     vcDiffCaseCount += 1
-                    vcDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                    vcDiffTime += getTimeLimit(timeDiff)
                     // console.log(diffWord)
                   } else if (operatorSymbols.includes(diffWord[0].value) && operatorSymbols.includes(diffWord[0].value)) {
                     operDiffCaseCount += 1
-                    operDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                    operDiffTime += getTimeLimit(timeDiff)
                   }
                 }
               }
@@ -195,11 +199,11 @@ async function diffDatas() {
             let timeDiff = metaOK.submissionTime - metaWrong.submissionTime
             if (diffWord.reduce((res, val) => res && val.added, true)) {
               onlyAddCaseCount += 1
-              onlyAddTime += timeDiff <= 7200 ? timeDiff : 7200
+              onlyAddTime += getTimeLimit(timeDiff)
             }
             if (diffWord.reduce((res, val) => res && val.removed, true)) {
               onlyRemoveCaseCount += 1
-              onlyRemoveTime += timeDiff <= 7200 ? timeDiff : 7200
+              onlyRemoveTime += getTimeLimit(timeDiff)
             }
           }
         }
