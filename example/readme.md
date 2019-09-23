@@ -1,15 +1,18 @@
 # OK 제출 이전의 wrong code와의 비교
+- 시간 계산은 7200초 이상 걸릴 경우 7200초로 간주한다.
+
 ## 정답에 가까운 코드 조건
 - 같은 위치의 줄 1개가 다른 경우: 79827개의 code들 중 2579개의 쌍(중복 가능)
 - total code count: 79827
 - solved case count: 36585
 - cannot solve case count: 5632
-- one time solved case count: 23350
+- solve at once case count: 23350
 - 틀리고 풀었던 개수: 13235
-- a line diff problem case count : 2427
-- a word diff problem case count : 891
-- a line diff case count, can be multiple case in one problem : 2579
-- a word diff case count, can be multiple case in one problem : 965
+- a line diff problem case count : 2427 (about 18.3%)
+- a word diff problem case count : 891 (about 6.7%)
+- a line diff case count, can exist multiple pairs in one problem : 2579
+- a word diff case count, can exist multiple pairs in one problem : 965
+- a word diff average seconds, can exist multiple pairs in one problem : 497.2507772020725
 
 ## 차이의 정도를 보기
 - jsdiff라이브러리의 diffWords 함수를 사용 단어가 몇개나 차이가 나는가
@@ -20,12 +23,16 @@
 ```json
 // 부등식/ 등식 잘못 씀
 {"message":"equality diff case count: 172","level":"info"}
+{"message":"equality diff average seconds: 741.7848837209302","level":"info"}
 // 상수 잘못 씀
 {"message":"constant diff case count: 233","level":"info"}
+{"message":"constant diff average seconds: 428.31330472103","level":"info"}
 // 변수 잘못 씀
 {"message":"variable diff case count: 406","level":"info"}
+{"message":"variable diff average seconds: 506.1527093596059","level":"info"}
 // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
 {"message":"variable and constant diff case count: 39","level":"info"}
+{"message":"variable and constant diff average seconds: 609.3076923076923","level":"info"}
 ```
 
 # 사람의 코딩 실수 예제들

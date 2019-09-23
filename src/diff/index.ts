@@ -26,14 +26,19 @@ async function diffDatas() {
   let lineDiffCaseCount = 0
   // 한 개의 단어가 치환 or 생성 or 삭제된 경우의 가짓수, 한 문제에서 여러 번 가능
   let aWordDiffCaseCount = 0
+  let aWordDiffTime = 0
   // 부등식/ 등식 잘못 씀
   let equalityDiffCaseCount = 0
+  let equalityDiffTime = 0
   // 상수 잘못 씀
   let constantDiffCaseCount = 0
+  let constantDiffTime = 0
   // 변수 잘못 씀
   let variableDiffCaseCount = 0
+  let variableDiffTime = 0
   // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
   let vcDiffCaseCount = 0
+  let vcDiffTime = 0
   // operator 잘못 씀
 
   for (const contestId of contestIds) {
@@ -119,7 +124,7 @@ async function diffDatas() {
               .diffWords(diffResult[0].value, diffResult[1].value)
               .filter(res => res.added === true || res.removed === true)
 
-            // console.log(`${contestId} ${user} ${problemIndex} diff result with ${submissionIds[okIndexes[oki]]} and ${submissionIds[subi]}`)
+            console.log(`${contestId} ${user} ${problemIndex} diff result with ${submissionIds[okIndexes[oki]]} and ${submissionIds[subi]}`)
             logger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[subi]}/code.cpp`)
             logger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`)
             logger.info(diffResult)
@@ -135,28 +140,35 @@ async function diffDatas() {
             if (diffWord.length === 2) {
               if (diffWord[0].added && diffWord[1].removed || diffWord[0].removed && diffWord[1].added) {
                 if (diffWord[0].count === 1 && diffWord[1].count === 1) {
+                  let timeDiff = metaOK.submissionTime - metaWrong.submissionTime
                   isWordDiff = true // 이 문제는 한 단어만 달라서 틀린 적이 있다.
                   aWordDiffCaseCount += 1
+                  aWordDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+
                   aWordDiffLogger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[subi]}/code.cpp`)
                   aWordDiffLogger.info(`${dataPath}/${contestId}/${user}/${problemIndex}/${submissionIds[okIndexes[oki]]}/code.cpp`)
                   aWordDiffLogger.info(diffResult)
                   aWordDiffLogger.info(diffWord)
-                  aWordDiffLogger.info(`Time diff: ${metaOK.submissionTime - metaWrong.submissionTime}`)
+                  aWordDiffLogger.info(`Time diff: ${timeDiff}`)
                   aWordDiffLogger.info(`other submission between them: ${okIndexes[oki] - subi - 1}`)
 
                   // 부등식/ 등식 잘못 씀
                   if (equalitySymbols.includes(diffWord[0].value) && equalitySymbols.includes(diffWord[1].value)) {
                     equalityDiffCaseCount += 1
+                    equalityDiffTime += timeDiff <= 7200 ? timeDiff : 7200
                   } else if (!isNaN(Number((diffWord[0].value))) && !isNaN(Number((diffWord[1].value)))) {
                     // 상수 잘못 씀
                     constantDiffCaseCount += 1
+                    constantDiffTime += timeDiff <= 7200 ? timeDiff : 7200
                   } else if (diffWord[0].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g) && diffWord[1].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g)) {
                     // 변수 잘못 씀
                     variableDiffCaseCount += 1
+                    variableDiffTime += timeDiff <= 7200 ? timeDiff : 7200
                   } else if (diffWord[0].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g) && !isNaN(Number((diffWord[1].value)))
                     || !isNaN(Number((diffWord[0].value))) && diffWord[1].value.match(/^[a-zA-Z_$][a-zA-Z_$0-9]*/g)) {
                     // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
                     vcDiffCaseCount += 1
+                    vcDiffTime += timeDiff <= 7200 ? timeDiff : 7200
                     // console.log(diffWord)
                   }  
                 }
@@ -181,26 +193,32 @@ async function diffDatas() {
   console.log(`solved case count: ${solvedCaseCount}`)
   logger.info(`cannot solve case count: ${cannotSolveCaseCount}`)
   console.log(`cannot solve case count: ${cannotSolveCaseCount}`)
-  logger.info(`one time solved case count: ${oneTimeSolvedCaseCount}`)
-  console.log(`one time solved case count: ${oneTimeSolvedCaseCount}`)
+  logger.info(`solve at once case count: ${oneTimeSolvedCaseCount}`)
+  console.log(`solve at once case count: ${oneTimeSolvedCaseCount}`)
   logger.info(`a line diff problem case count : ${wrongLineProblemCaseCount}`)
   console.log(`a line diff problem case count : ${wrongLineProblemCaseCount}`)
   logger.info(`a word diff problem case count : ${wrongWordProblemCaseCount}`)
   console.log(`a word diff problem case count : ${wrongWordProblemCaseCount}`)
-  logger.info(`a line diff case count, can be multiple case in one problem : ${lineDiffCaseCount}`)
-  console.log(`a line diff case count, can be multiple case in one problem : ${lineDiffCaseCount}`)
-  logger.info(`a word diff case count, can be multiple case in one problem : ${aWordDiffCaseCount}`)
-  console.log(`a word diff case count, can be multiple case in one problem : ${aWordDiffCaseCount}`)
+  logger.info(`a line diff case count, can exist multiple pairs in one problem : ${lineDiffCaseCount}`)
+  console.log(`a line diff case count, can exist multiple pairs in one problem : ${lineDiffCaseCount}`)
+  logger.info(`a word diff case count, can exist multiple pairs in one problem : ${aWordDiffCaseCount}`)
+  console.log(`a word diff case count, can exist multiple pairs in one problem : ${aWordDiffCaseCount}`)
+  logger.info(`a word diff average seconds, can exist multiple pairs in one problem : ${aWordDiffTime / aWordDiffCaseCount}`)
+  console.log(`a word diff average seconds, can exist multiple pairs in one problem : ${aWordDiffTime / aWordDiffCaseCount}`)
 
 
   // 부등식/ 등식 잘못 씀
   logger.info(`equality diff case count: ${equalityDiffCaseCount}`)
+  logger.info(`equality diff average seconds: ${equalityDiffTime / equalityDiffCaseCount}`)
   // 상수 잘못 씀
   logger.info(`constant diff case count: ${constantDiffCaseCount}`)
+  logger.info(`constant diff average seconds: ${constantDiffTime / constantDiffCaseCount}`)
   // 변수 잘못 씀
   logger.info(`variable diff case count: ${variableDiffCaseCount}`)
+  logger.info(`variable diff average seconds: ${variableDiffTime / variableDiffCaseCount}`)
   // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
   logger.info(`variable and constant diff case count: ${vcDiffCaseCount}`)
+  logger.info(`variable and constant diff average seconds: ${vcDiffTime / vcDiffCaseCount}`)
 }
 
 try {
