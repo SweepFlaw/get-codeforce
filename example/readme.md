@@ -33,6 +33,9 @@
 // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
 {"message":"variable and constant diff case count: 39","level":"info"}
 {"message":"variable and constant diff average seconds: 609.3076923076923","level":"info"}
+// operator 잘못 씀 except (in)equality
+{"message":"operator diff case count: 29","level":"info"}
+{"message":"operator diff average seconds: 388.7241379310345","level":"info"
 ```
 
 # 사람의 코딩 실수 예제들

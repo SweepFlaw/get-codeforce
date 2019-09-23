@@ -5,7 +5,10 @@ import logger, { makeLogger } from '@getCodeforce/logger'
 const dataPath = `${__dirname}/../../datas`
 const contestIds = fs.readdirSync(dataPath)
 const equalitySymbols = ['<', '<=', '>', '>=', '=', '==', '!=']
-const operatorSymbols = ['-', '+', '*', '/', '%']
+const operatorSymbols = ['-', '+', '*', '/', '%',
+  '^', '&', '|', '&&', '||', '++', '--', '~', '!', '<<', '>>',
+  '+=', '-=', '/=', '*=', '%=', '&=', '|=', '^=', '<<=', '>>='
+]
 
 async function diffDatas() {
   // 한 단어가 다른 로그만 별도로 기록
@@ -40,6 +43,8 @@ async function diffDatas() {
   let vcDiffCaseCount = 0
   let vcDiffTime = 0
   // operator 잘못 씀
+  let operDiffCaseCount = 0
+  let operDiffTime = 0
 
   for (const contestId of contestIds) {
     const users = fs.readdirSync(`${dataPath}/${contestId}`)
@@ -170,7 +175,10 @@ async function diffDatas() {
                     vcDiffCaseCount += 1
                     vcDiffTime += timeDiff <= 7200 ? timeDiff : 7200
                     // console.log(diffWord)
-                  }  
+                  } else if (operatorSymbols.includes(diffWord[0].value) && operatorSymbols.includes(diffWord[0].value)) {
+                    operDiffCaseCount += 1
+                    operDiffTime += timeDiff <= 7200 ? timeDiff : 7200
+                  }
                 }
               }
             }
@@ -219,6 +227,9 @@ async function diffDatas() {
   // 변수 상수 잘못 씀 (변수 => 상수 or 상수 => 변수)
   logger.info(`variable and constant diff case count: ${vcDiffCaseCount}`)
   logger.info(`variable and constant diff average seconds: ${vcDiffTime / vcDiffCaseCount}`)
+  // operator 잘못 씀 except (in)equality
+  logger.info(`operator diff case count: ${operDiffCaseCount}`)
+  logger.info(`operator diff average seconds: ${operDiffTime / operDiffCaseCount}`)
 }
 
 try {
