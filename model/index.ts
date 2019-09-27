@@ -13,14 +13,14 @@ AWS.config.update({
 interface CodeforceDB { 
   user: string
   problem: string // contestId + '-' + problem index + '-' + submissionId
-  submissionTime: number
-  code: string
-  verdict: string
-  programmingLanguage: string
-  passedTestCount: number
-  timeConsumedMillis: number
-  memoryConsumedBytes: number
-  relativeTimeSeconds: number
+  submissionTime?: number
+  code?: string
+  verdict?: string
+  programmingLanguage?: string
+  passedTestCount?: number
+  timeConsumedMillis?: number
+  memoryConsumedBytes?: number
+  relativeTimeSeconds?: number
 }
 
 const dynamodb = new AWS.DynamoDB({
@@ -102,23 +102,27 @@ async function writeData(datas: CodeforceDB[]) {
   }
 }
 
-async function findData(datas: CodeforceDB[]) {
-  for await (const data of datas) {
-    const params = {
-      TableName: 'codeforce',
-      Key: {
-        user: data.user,
-        problem: data.problem
-      }
-    }
-
-    try {
-      const find = await docClient.get(params).promise()
-      logger.info('find data')
-    } catch (err) {
-      logger.error(JSON.stringify(err, null, 2))
+async function existData(data: CodeforceDB): Promise<boolean> {
+  const params = {
+    TableName: 'codeforce',
+    Key: {
+      user: data.user,
+      problem: data.problem
     }
   }
+
+  try {
+    const find = await docClient.get(params).promise()
+    
+    if (find.Item) {
+      return true
+    } else {
+      return false
+    }
+  } catch (err) {
+    logger.error(err)
+  }
+  return false
 }
 
 export {
@@ -126,6 +130,6 @@ export {
   docClient,
   createTable,
   writeData,
-  findData,
+  existData,
   CodeforceDB
 }

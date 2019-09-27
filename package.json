@@ -8,6 +8,7 @@
   "main": "index.ts",
   "license": "MIT",
   "scripts": {
+    "pm2-crawl": "pm2 start crawl.config.js",
     "crawl": "ts-node -r tsconfig-paths/register --files src/crawl/index.ts",
     "scan": "ts-node -r tsconfig-paths/register --files src/scan/index.ts",
     "diff": "ts-node -r tsconfig-paths/register --files src/diff/index.ts",

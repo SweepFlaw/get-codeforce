@@ -2,14 +2,25 @@ import * as rm from 'typed-rest-client/RestClient'
 import * as hm from 'typed-rest-client/HttpClient'
 import * as cheerio from 'cheerio'
 import Status from './type'
-import { writeData } from '@getCodeforce/model'
+import { writeData, existData } from '@getCodeforce/model'
 import logger from '@getCodeforce/logger'
 
 let restc: rm.RestClient = new rm.RestClient('rest-samples', 'http://codeforces.com')
 let httpc: hm.HttpClient = new hm.HttpClient('codeforce-http')
+const additionalHeaders = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+}
 
 async function getContestList(): Promise<number[]> {
-  let res: rm .IRestResponse<any> = await restc.get<any>('/api/contest.list?gym=false')
+  let res: rm .IRestResponse<any>
+
+  try {
+    res = await restc.get<any>('/api/contest.list?gym=false', {
+      additionalHeaders
+    })
+  } catch (err) {
+    logger.error(err)
+  }
   
   if (res.statusCode.toString()[0] !== '2') {
     return []
@@ -21,7 +32,15 @@ async function getContestList(): Promise<number[]> {
 }
 
 async function getContestStatus(contestId, from, count): Promise<Status[]> {
-  let res: rm .IRestResponse<any> = await restc.get<any>(`/api/contest.status?contestId=${contestId}&from=${from}&count=${count}`)
+  let res: rm .IRestResponse<any>
+
+  try {
+    res = await restc.get<any>(`/api/contest.status?contestId=${contestId}&from=${from}&count=${count}`, {
+      additionalHeaders
+    })
+  } catch (err) {
+    logger.error(err)
+  }
   
   if (res.statusCode.toString()[0] !== '2') {
     return []
@@ -31,7 +50,16 @@ async function getContestStatus(contestId, from, count): Promise<Status[]> {
 }
 
 async function getSourceCode(contestId, submissionId): Promise<string> {
-  let res: hm.HttpClientResponse = await httpc.get(`http://codeforces.com/contest/${contestId}/submission/${submissionId}`)
+  let res: hm.HttpClientResponse
+  
+  try {
+    res = await httpc.get(`http://codeforces.com/contest/${contestId}/submission/${submissionId}`, {
+      additionalHeaders
+    })
+  } catch (err) {
+    logger.error(err)
+  }
+
   if (res.message.statusCode.toString()[0] !== '2') {
     return 'wrong status code'
   }
@@ -55,8 +83,12 @@ const sleep = (ms) => {
 async function getCodesFromContest() {
   const contestlist = await getContestList()
   logger.info(`contest list count: ${contestlist.length}`)
+  const notSearching = [1209, 1214, 1215, 1220, 1229, 1230]
 
   for await (const contestId of contestlist) {
+    if (notSearching.includes(contestId)) {
+      continue
+    }
     let from = 1;
     const count = 100;
 
@@ -71,22 +103,31 @@ async function getCodesFromContest() {
 
       for await (const status of contestStatus) {
         if (status.author.members.length !== 1) {
-          continue;
+          continue
+        }
+
+        // 이미 검색했으면 다음 검색
+        if (await existData({
+          user: status.author.members[0].handle,
+          problem: `${status.contestId}-${status.problem.index}-${status.id}`
+        })) {
+          continue
         }
 
         const sourceCode = await getSourceCode(status.contestId, status.id)
+
         if (sourceCode === 'fail') {
           logger.error(`no source code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
           
-          // wait 2 minute, maybe server block crawler
-          await sleep(120000)
-          continue;
+          // wait 5 minute, maybe server block crawler
+          await sleep(300000)
+          continue
         } else if (sourceCode === 'wrong status code') {
           logger.error(`wrong status code, http://codeforces.com/contest/${status.contestId}/submission/${status.id}`)
-          
-          // wait 2 minute, maybe server block crawler
-          await sleep(120000)
-          continue;
+
+          // wait 5 minute, maybe server block crawler
+          await sleep(300000)
+          continue
         }
 
         logger.info(`contestId: ${status.contestId}`)
@@ -105,8 +146,8 @@ async function getCodesFromContest() {
           relativeTimeSeconds: status.relativeTimeSeconds
         }])
 
-        // wait at least 100ms
-        await sleep(100)
+        // wait at least 1s
+        await sleep(300)
       }
     }
   }
@@ -115,5 +156,5 @@ async function getCodesFromContest() {
 try {
   getCodesFromContest()
 } catch (err) {
-  logger.error(JSON.stringify(err, null, 2))
+  logger.error(err)
 }
