@@ -70,6 +70,9 @@ async function getSourceCode(contestId, submissionId): Promise<string> {
   if (parsed('#program-source-text').length === 0) {
     return 'fail'
   }
+  if (!parsed('#program-source-text')[0].children || parsed('#program-source-text')[0].children.length === 0) {
+    return 'fail'
+  }
   const sourceCode = parsed('#program-source-text')[0].children[0].data
   return sourceCode
 }
