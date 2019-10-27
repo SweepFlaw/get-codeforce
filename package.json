@@ -9,6 +9,8 @@
   "license": "MIT",
   "scripts": {
     "pm2-crawl": "pm2 start crawl.config.js",
+    "lex-parse": "ts-node -r tsconfig-paths/register --files src/lex_parse/index.ts",
+    "embed": "ts-node -r tsconfig-paths/register --files src/embedding/index.ts",
     "crawl": "ts-node -r tsconfig-paths/register --files src/crawl/index.ts",
     "scan": "ts-node -r tsconfig-paths/register --files src/scan/index.ts",
     "diff": "ts-node -r tsconfig-paths/register --files src/diff/index.ts",
@@ -22,6 +24,7 @@
     "@types/htmlparser2": "^3.10.1",
     "aws-sdk": "^2.528.0",
     "cheerio": "^1.0.0-rc.3",
+    "child-process-promise": "^2.2.1",
     "diff": "^4.0.1",
     "dotenv": "^8.1.0",
     "htmlparser2": "^4.0.0",
