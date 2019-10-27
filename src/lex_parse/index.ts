@@ -9,12 +9,12 @@ const parser = `${__dirname}/../../../cppfileParse/p_cpp2csv`
 
 async function runLexerParser() {
   const iterator = dataDirIterator()
-  let dataDir = iterator.next()
+  let dataNext = iterator.next()
   let files = []
   let fileLength = 20
 
-  while (!dataDir.done) {
-    const codedir = dataDir.value
+  while (!dataNext.done) {
+    const codedir = dataNext.value
     console.log(codedir)
 
     exec(`${lexer} ${codedir}/code.cpp ${codedir}/lexed.csv`) 
@@ -52,7 +52,7 @@ async function runLexerParser() {
     //   files = []
     // }
 
-    dataDir = iterator.next()
+    dataNext = iterator.next()
   }
 }
 
