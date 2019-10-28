@@ -1,13 +1,14 @@
+import * as fs from 'fs'
 import { exec } from 'child-process-promise'
 import logger from '@getCodeforce/logger'
-import { dataDirIterator } from '@getCodeforce/src/utils'
+import { dataDirIterator, sleep } from '@getCodeforce/src/utils'
 
 // https://github.com/cushionbadak/cppfileLex
-const lexer = `${__dirname}/../../../cppfileLex/lx_cpp2csv`
+const lexer = `${__dirname}/../../../Lexer/lx_cpp2csv`
 // https://github.com/cushionbadak/cppfileParse
 const parser = `${__dirname}/../../../cppfileParse/p_cpp2csv`
 
-async function runLexerParser() {
+async function runLexerParser(retry=false) {
   const iterator = dataDirIterator()
   let dataNext = iterator.next()
   let files = []
@@ -17,6 +18,12 @@ async function runLexerParser() {
     const codedir = dataNext.value
     console.log(codedir)
 
+    if (fs.existsSync(`${codedir}/code.cpp`)) {
+      if (!retry) {
+        continue
+      }
+    }    
+
     exec(`${lexer} ${codedir}/code.cpp ${codedir}/lexed.csv`) 
       .then(function (result) {
         logger.info(result.stdout)
@@ -25,15 +32,16 @@ async function runLexerParser() {
       .catch(function (err) {
         logger.error(err)
       })
+    sleep(200)
 
-    exec(`${parser} ${codedir}/code.cpp ${codedir}/parsed.csv`) 
-      .then(function (result) {
-        logger.info(result.stdout)
-        logger.error(result.stderr)
-      })
-      .catch(function (err) {
-        logger.error(err)
-      })
+    // exec(`${parser} ${codedir}/code.cpp ${codedir}/parsed.csv`) 
+    //   .then(function (result) {
+    //     logger.info(result.stdout)
+    //     logger.error(result.stderr)
+    //   })
+    //   .catch(function (err) {
+    //     logger.error(err)
+    //   })
 
     // files.push(codedir)
     // if (files.length >= fileLength) {
@@ -57,7 +65,7 @@ async function runLexerParser() {
 }
 
 async function execute() {
-  await runLexerParser()
+  await runLexerParser(true)
 }
 
 try {

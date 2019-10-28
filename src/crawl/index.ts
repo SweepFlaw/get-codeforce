@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio'
 import Status from './type'
 import { writeData, existData } from '@getCodeforce/model'
 import logger from '@getCodeforce/logger'
+import { sleep } from '@getCodeforce/src/utils'
 
 let restc: rm.RestClient = new rm.RestClient('rest-samples', 'http://codeforces.com')
 let httpc: hm.HttpClient = new hm.HttpClient('codeforce-http')
@@ -75,12 +76,6 @@ async function getSourceCode(contestId, submissionId): Promise<string> {
   }
   const sourceCode = parsed('#program-source-text')[0].children[0].data
   return sourceCode
-}
-
-const sleep = (ms) => {
-  return new Promise(resolve=>{
-      setTimeout(resolve,ms)
-  })
 }
 
 async function getCodesFromContest() {
