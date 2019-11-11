@@ -19,7 +19,9 @@ function diffTwoCSV(cmp: string[][], base: string[][]): number {
   let diffTokenCount = 0
   for (let i = 0; i < cmp.length; i++) {
     if (cmp[i][5] !== base[i][5]) {
-      diffTokenCount += 1
+      // if (cmp[i][3] === 'DeclRefExpr' && base[i][3] === 'DeclRefExpr') {
+        diffTokenCount += 1
+      // }
     }
   }
 
