@@ -1,7 +1,6 @@
-import { existData, createTable, writeData, docClient } from './'
+import { existData, createTestcaseTable, createTable, writeData, docClient } from './'
 import datas from './data'
 
-// createTable()
 async function test() {
   console.log(await existData({
     user: 'AlexPop28',
@@ -9,4 +8,5 @@ async function test() {
   }))
 }
 
-test()
+
+// createTestcaseTable()

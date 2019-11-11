@@ -13,3 +13,6 @@ pid.txt
 # data files
 datas
 dataset
+pairData
+
+**/*.zip

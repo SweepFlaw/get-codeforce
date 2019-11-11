@@ -15,7 +15,8 @@
     "scan": "ts-node -r tsconfig-paths/register --files src/scan/index.ts",
     "diff": "ts-node -r tsconfig-paths/register --files src/diff/index.ts",
     "model": "ts-node -r tsconfig-paths/register --files model/index.ts",
-    "model-test": "ts-node -r tsconfig-paths/register --files model/model.spec.ts"
+    "model-test": "ts-node -r tsconfig-paths/register --files model/model.spec.ts",
+    "get-testcase": "ts-node -r tsconfig-paths/register --files src/getTestcases/index.ts"
   },
   "dependencies": {
     "@types/cheerio": "^0.22.13",

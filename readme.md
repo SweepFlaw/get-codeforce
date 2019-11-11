@@ -39,7 +39,25 @@ $ yarn scan
 $ yarn diff
 ```
 
-# How To Embed
+# Get a little diff code pair
+- Need docker
+- Need .env file for key data of dynamodb  
+  ```
+  AccessKeyId=${your_access_key_id}
+  SecretAccessKey=${your_secret_access_key}
+  ```
+```bash
+$ docker pull rhfktj/get-codeforce:0.2.0
+$ docker run -it --name get-codeforce -d rhfktj/get-codeforce:0.2.0
+$ docker exec -it get-codeforce /bin/bash
+# inside docker
+$ yarn scan
+$ yarn lex-parse
+$ yarn diff lex
+$ exit
+```
+
+# Embedding column info
 ```
 the origin line - first Declare
 the origin column - first Declare
