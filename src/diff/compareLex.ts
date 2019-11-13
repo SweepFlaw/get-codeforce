@@ -19,9 +19,11 @@ function diffTwoCSV(cmp: string[][], base: string[][]): number {
   let diffTokenCount = 0
   for (let i = 0; i < cmp.length; i++) {
     if (cmp[i][5] !== base[i][5]) {
-      // if (cmp[i][3] === 'DeclRefExpr' && base[i][3] === 'DeclRefExpr') {
+      if (cmp[i][3] === 'DeclRefExpr' && base[i][3] === 'DeclRefExpr') {
         diffTokenCount += 1
-      // }
+      } else {
+        return -1
+      }
     }
   }
 
@@ -89,7 +91,8 @@ export function diffLexed() {
           
           const diffTokenCount = diffTwoCSV(wrongdata, okdata)
   
-          if (diffTokenCount === 1) {
+          // if (diffTokenCount === 1) {
+          if (diffTokenCount === 1 || diffTokenCount === 2) {
             savePair(nowpathdir, nowpathdirList[i], okdir)
           }
         }
