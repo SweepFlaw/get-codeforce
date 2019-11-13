@@ -53,8 +53,13 @@ async function scanAndSave() {
       params = { ExclusiveStartKey: LastEvaluatedKey, ...params }
     }
 
-    const res = await docClient.scan(params).promise()
-    ;({ LastEvaluatedKey, ScannedCount } = res)
+    let res: any
+    try {
+      res = await docClient.scan(params).promise()
+    } catch (err) {
+      logger.error(err)
+    }
+    ({ LastEvaluatedKey, ScannedCount } = res)
 
     res.Items.forEach((data: CodeforceDB) => {
       saveToFile(data)
@@ -71,6 +76,7 @@ async function scanAndSave() {
 try {
   logger.info(`scan starts`)
   scanAndSave()
+  logger.info(`scan end`)
 } catch (err) {
   logger.error(JSON.stringify(err, null, 2))
 }
