@@ -9,6 +9,7 @@
   "license": "MIT",
   "scripts": {
     "pm2-crawl": "pm2 start crawl.config.js",
+    "pm2-diff": "pm2 start diff.config.js",
     "lex-parse": "ts-node -r tsconfig-paths/register --files src/lex_parse/index.ts",
     "embed": "ts-node -r tsconfig-paths/register --files src/embedding/index.ts",
     "crawl": "ts-node -r tsconfig-paths/register --files src/crawl/index.ts",
