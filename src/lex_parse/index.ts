@@ -18,7 +18,7 @@ async function runLexerParser(retry=false) {
     const codedir = dataNext.value
     console.log(codedir)
 
-    if (fs.existsSync(`${codedir}/code.cpp`)) {
+    if (fs.existsSync(`${codedir}/lexed.csv`)) {
       if (!retry) {
         continue
       }
