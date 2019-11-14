@@ -1,6 +1,8 @@
-import { dataDirIterator, parseCSV, savePair, savePathDir } from '@getCodeforce/src/utils'
-import logger, { makeLogger } from '@getCodeforce/logger'
+import logger from '@getCodeforce/logger'
+import { dataDirIterator, parseCSV } from '@getCodeforce/src/utils'
 import * as fs from 'fs'
+
+const savePathDir = `${__dirname}/../../pairData`
 
 function readLexed(path: string) {
   if (fs.existsSync(path)) {
@@ -28,6 +30,24 @@ function diffTwoCSV(cmp: string[][], base: string[][]): number {
   return diffTokenCount
 }
 
+function savePair(now: string, wrongPath: string, okPath: string) {
+  logger.info(`save pair
+  ${now}/${wrongPath}
+  ${now}/${okPath}
+`)
+  const dirname = now.split('/').join('_')
+  
+  if (!fs.existsSync(savePathDir)) {
+    fs.mkdirSync(savePathDir)
+  }
+  if (!fs.existsSync(`${savePathDir}/${dirname}`)) {
+    fs.mkdirSync(`${savePathDir}/${dirname}`)
+  }
+
+  fs.copyFileSync(`${now}/${wrongPath}/code.cpp`, `${savePathDir}/${dirname}/${wrongPath}.cpp`)
+  fs.copyFileSync(`${now}/${okPath}/code.cpp`, `${savePathDir}/${dirname}/${okPath}.cpp`)
+}
+
 export function diffLexed() {
   const iterator = dataDirIterator()
   let pathdirIter = iterator.next()
@@ -53,7 +73,7 @@ export function diffLexed() {
         })[0]
 
         if (!fs.existsSync(`${nowpathdir}/${okdir}/lexed.csv`)) {
-          console.log(`ok lexed not exist ${nowpathdir}/${okdir}/lexed.csv`)
+          // console.log(`ok lexed not exist ${nowpathdir}/${okdir}/lexed.csv`)
           okidx = -1
         }
         let okdata: string[][] = readLexed(`${nowpathdir}/${okdir}/lexed.csv`)
@@ -64,7 +84,7 @@ export function diffLexed() {
           }
   
           if (!fs.existsSync(`${nowpathdir}/${nowpathdirList[i]}/lexed.csv`)) {
-            console.log(`now lexed not exist ${nowpathdir}/${nowpathdirList[i]}/lexed.csv`)
+            // console.log(`now lexed not exist ${nowpathdir}/${nowpathdirList[i]}/lexed.csv`)
             continue
           }  
           let wrongdata: string[][] = readLexed(`${nowpathdir}/${nowpathdirList[i]}/lexed.csv`)
@@ -73,14 +93,33 @@ export function diffLexed() {
   
           // if (diffTokenCount === 1) {
           if (diffTokenCount === 1 || diffTokenCount === 2) {
-            savePair(nowpathdir, nowpathdirList[i], okdir, savePathDir)
+            savePair(nowpathdir, nowpathdirList[i], okdir)
+
+
+            logger.info(`${nowpathdir}/${okdir}/meta.json`)
+            logger.info(`${nowpathdir}/${nowpathdirList[i]}/meta.json`)
+            console.log(`${nowpathdir}/${okdir}/meta.json`)
+            console.log(`${nowpathdir}/${nowpathdirList[i]}/meta.json`)
+            if (okidx - i > 1) {
+              logger.info(`submitted file number between two is ${okidx - i - 1}`)
+              console.log(`submitted file number between two is ${okidx - i - 1}\n`)
+            } else {
+              console.log(`\n`)
+            }
           }
         }
       }
 
       nowpathdir = thispath
       nowpathdirList = [routeList[routeList.length - 1]]
-      console.log(`${nowpathdir} looking start`)
+      // console.log(`${nowpathdir} looking start`)
     }
   }
+}
+
+try {
+  const args = process.argv
+  diffLexed()
+} catch (err) {
+  logger.error(err)
 }

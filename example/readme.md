@@ -18,6 +18,74 @@
 - jsdiff라이브러리의 diffWords 함수를 사용 단어가 몇개나 차이가 나는가
 - word 파서를 별도로 사용하는 듯(나름 정확)
 
+## 문제 별 풀이 통계
+```
+P.A total: 57381
+P.A one time solve ratio: 0.6305397256931737
+P.A cannot solve ratio: 0.07627960474721597
+P.A little diff ratio: 0.021296247886931213
+P.B total: 50966
+P.B one time solve ratio: 0.4867166346191579
+P.B cannot solve ratio: 0.13881803555311384
+P.B little diff ratio: 0.020288035160695366
+P.C total: 34576
+P.C one time solve ratio: 0.4883734382230449
+P.C cannot solve ratio: 0.1400393336418325
+P.C little diff ratio: 0.015964831096714482
+P.E total: 6646
+P.E one time solve ratio: 0.34501956063797773
+P.E cannot solve ratio: 0.2016250376166115
+P.E little diff ratio: 0.03535961480589828
+P.D total: 19623
+P.D one time solve ratio: 0.31361157825001273
+P.D cannot solve ratio: 0.2364062579625949
+P.D little diff ratio: 0.03266574937573256
+P.F total: 2230
+P.F one time solve ratio: 0.23094170403587444
+P.F cannot solve ratio: 0.24260089686098654
+P.F little diff ratio: 0.03094170403587444
+P.D2 total: 1888
+P.D2 one time solve ratio: 0.7182203389830508
+P.D2 cannot solve ratio: 0.08739406779661017
+P.D2 little diff ratio: 0.005296610169491525
+P.D1 total: 2323
+P.D1 one time solve ratio: 0.5794231597072751
+P.D1 cannot solve ratio: 0.25871717606543265
+P.D1 little diff ratio: 0.002582866982350409
+P.G total: 413
+P.G one time solve ratio: 0.4043583535108959
+P.G cannot solve ratio: 0.11380145278450363
+P.G little diff ratio: 0.048426150121065374
+P.H total: 141
+P.H one time solve ratio: 0.24113475177304963
+P.H cannot solve ratio: 0.41843971631205673
+P.H little diff ratio: 0.02127659574468085
+P.G1 total: 1395
+P.G1 one time solve ratio: 0.6781362007168459
+P.G1 cannot solve ratio: 0.06953405017921147
+P.G1 little diff ratio: 0.02078853046594982
+P.E1 total: 2087
+P.E1 one time solve ratio: 0.2606612362242453
+P.E1 cannot solve ratio: 0.4000958313368472
+P.E1 little diff ratio: 0.01772879731672257
+P.E2 total: 953
+P.E2 one time solve ratio: 0.19517313746065057
+P.E2 cannot solve ratio: 0.38195173137460653
+P.E2 little diff ratio: 0.022035676810073453
+P.G2 total: 58
+P.G2 one time solve ratio: 0.3620689655172414
+P.G2 cannot solve ratio: 0.1724137931034483
+P.G2 little diff ratio: 0
+P.F1 total: 4
+P.F1 one time solve ratio: 0.5
+P.F1 cannot solve ratio: 0.5
+P.F1 little diff ratio: 0
+P.F2 total: 1
+P.F2 one time solve ratio: 1
+P.F2 cannot solve ratio: 0
+P.F2 little diff ratio: 0
+```
+
 ## 한 개의 단어가 치환 or 생성 or 삭제된 경우의 가짓수
 - 965개의 쌍
 ```json
