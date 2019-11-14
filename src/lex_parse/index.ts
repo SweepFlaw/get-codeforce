@@ -4,7 +4,7 @@ import logger from '@getCodeforce/logger'
 import { dataDirIterator, sleep } from '@getCodeforce/src/utils'
 
 // https://github.com/cushionbadak/cppfileLex
-const lexer = `${__dirname}/../../../Lexer/lx_cpp2csv`
+const lexer = `${__dirname}/lx_cpp2csv`
 // https://github.com/cushionbadak/cppfileParse
 const parser = `${__dirname}/../../../cppfileParse/p_cpp2csv`
 
@@ -18,21 +18,27 @@ async function runLexerParser(retry=false) {
     const codedir = dataNext.value
     console.log(codedir)
 
-    if (fs.existsSync(`${codedir}/code.cpp`)) {
+    if (fs.existsSync(`${codedir}/lexed.csv`)) {
       if (!retry) {
         continue
       }
-    }    
+    }
 
-    exec(`${lexer} ${codedir}/code.cpp ${codedir}/lexed.csv`) 
-      .then(function (result) {
-        logger.info(result.stdout)
-        logger.error(result.stderr)
-      })
-      .catch(function (err) {
-        logger.error(err)
-      })
-    sleep(200)
+    try {
+      const result = await exec(`${lexer} ${codedir}/code.cpp ${codedir}/lexed.csv`) 
+      logger.info(result.stdout)
+      logger.error(result.stderr)
+    } catch (err) {
+      logger.error(err)
+    }
+    //   .then(function (result) {
+    //     logger.info(result.stdout)
+    //     logger.error(result.stderr)
+    //   })
+    //   .catch(function (err) {
+    //     logger.error(err)
+    //   })
+    // sleep(500)
 
     // exec(`${parser} ${codedir}/code.cpp ${codedir}/parsed.csv`) 
     //   .then(function (result) {

@@ -9,6 +9,7 @@
   "license": "MIT",
   "scripts": {
     "pm2-crawl": "pm2 start crawl.config.js",
+    "pm2-diff": "pm2 start diff.config.js",
     "lex-parse": "ts-node -r tsconfig-paths/register --files src/lex_parse/index.ts",
     "embed": "ts-node -r tsconfig-paths/register --files src/embedding/index.ts",
     "crawl": "ts-node -r tsconfig-paths/register --files src/crawl/index.ts",
@@ -16,7 +17,9 @@
     "diff": "ts-node -r tsconfig-paths/register --files src/diff/index.ts",
     "model": "ts-node -r tsconfig-paths/register --files model/index.ts",
     "model-test": "ts-node -r tsconfig-paths/register --files model/model.spec.ts",
-    "get-testcase": "ts-node -r tsconfig-paths/register --files src/getTestcases/index.ts"
+    "get-testcase": "ts-node -r tsconfig-paths/register --files src/getTestcases/index.ts",
+    "play": "ts-node -r tsconfig-paths/register --files src/playground/index.ts",
+    "data-stats": "ts-node -r tsconfig-paths/register --files src/dataStats/index.ts"
   },
   "dependencies": {
     "@types/cheerio": "^0.22.13",

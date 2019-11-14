@@ -1,5 +1,8 @@
 node_modules
 datas
+dataset
+pairData
 *.log
+**/*.zip
 logs
 .env

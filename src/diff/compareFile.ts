@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as diff from 'diff'
 import logger, { makeLogger } from '@getCodeforce/logger'
+import { savePair, savePathDir } from '@getCodeforce/src/utils'
 
 const dataPath = `${__dirname}/../../datas`
 const contestIds = fs.readdirSync(dataPath)
@@ -59,10 +60,8 @@ export async function diffDatas() {
 
   for (const contestId of contestIds) {
     const users = fs.readdirSync(`${dataPath}/${contestId}`)
-
     for (const user of users) {
       const problemIndexes = fs.readdirSync(`${dataPath}/${contestId}/${user}`)
-
       for (const problemIndex of problemIndexes) {
         const submissionIds = fs.readdirSync(`${dataPath}/${contestId}/${user}/${problemIndex}`)
         totalCodeCount += submissionIds.length
@@ -168,6 +167,8 @@ export async function diffDatas() {
                   aWordDiffLogger.info(diffWord)
                   aWordDiffLogger.info(`Time diff: ${timeDiff}`)
                   aWordDiffLogger.info(`other submission between them: ${okIndexes[oki] - subi - 1}`)
+
+                  savePair(`${dataPath}/${contestId}/${user}/${problemIndex}`, submissionIds[subi], submissionIds[okIndexes[oki]], savePathDir)
 
                   // 부등식/ 등식 잘못 씀
                   if (equalitySymbols.includes(diffWord[0].value) && equalitySymbols.includes(diffWord[1].value)) {
